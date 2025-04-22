@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Church Sunday Program</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            text-align: center;
+        }
+        .program-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .date {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .notice {
+            color: #d9534f;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Church Sunday Program</h1>
+    <p class="date" id="current-date"></p>
+    
+    <div id="program-container">
+        <!-- The program image will appear here -->
+        <img src="current/program.jpg" class="program-image" 
+             alt="Current Sunday Program" id="program-image"
+             onerror="imageError()">
+    </div>
+
+    <p id="loading-notice" class="notice">Loading this week's program...</p>
+
+    <script>
+        // Display current date
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', options);
+
+        // Handle missing image
+        function imageError() {
+            document.getElementById('loading-notice').textContent = 
+                "This week's program is not yet available. Please check back later.";
+        }
+
+        // Optional: Force image refresh (avoid caching issues)
+        window.onload = function() {
+            const img = document.getElementById('program-image');
+            img.src = img.src + '?t=' + new Date().getTime();
+        };
+    </script>
+</body>
+</html>
