@@ -10,9 +10,9 @@
             padding: 20px;
             text-align: center;
         }
-        .program-image {
-            max-width: 100%;
-            height: auto;
+        .pdf-container {
+            width: 100%;
+            height: 80vh;
             border: 1px solid #ddd;
             margin: 20px 0;
         }
@@ -25,6 +25,15 @@
             color: #d9534f;
             font-style: italic;
         }
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3a5f8a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -32,10 +41,15 @@
     <p class="date" id="current-date"></p>
     
     <div id="program-container">
-        <!-- The program image will appear here -->
-        <img src="current/program.jpg" class="program-image" 
-             alt="Current Sunday Program" id="program-image"
-             onerror="imageError()">
+        <!-- PDF will be embedded here -->
+        <iframe src="current/program.pdf#toolbar=0&navpanes=0" 
+                class="pdf-container" 
+                id="program-pdf"
+                onerror="pdfError()"></iframe>
+        
+        <a href="current/program.pdf" class="download-btn" download>
+            Download Program PDF
+        </a>
     </div>
 
     <p id="loading-notice" class="notice">Loading this week's program...</p>
@@ -46,16 +60,17 @@
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', options);
 
-        // Handle missing image
-        function imageError() {
+        // Handle missing PDF
+        function pdfError() {
             document.getElementById('loading-notice').textContent = 
                 "This week's program is not yet available. Please check back later.";
+            document.getElementById('program-pdf').style.display = 'none';
         }
 
-        // Optional: Force image refresh (avoid caching issues)
+        // Force refresh (avoid caching issues)
         window.onload = function() {
-            const img = document.getElementById('program-image');
-            img.src = img.src + '?t=' + new Date().getTime();
+            const pdf = document.getElementById('program-pdf');
+            pdf.src = pdf.src.split('#')[0] + '?t=' + new Date().getTime() + '#toolbar=0&navpanes=0';
         };
     </script>
 </body>
